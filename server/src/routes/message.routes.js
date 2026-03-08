@@ -1,0 +1,11 @@
+import express from 'express';
+import { getMessages, getUserForSider, sendMessage } from "../controllers/message.controller.js";
+import { protectedRoute } from "../middleware/auth.middleware.js";
+const router = express.Router();
+
+
+router.get("/users",protectedRoute,getUserForSider);
+router.get("/:id",protectedRoute,sendMessage);
+router.post("/send/:id",protectedRoute,sendMessage);
+
+export default router;
