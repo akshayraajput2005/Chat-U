@@ -14,13 +14,13 @@ getUser:async()=>{
   try {
     const res=await axiosInstance.get("messages/users");
     set({users:res.data}) 
-    
+    console.log(res.data)
   } catch (error) {
-     toast.error(error.response.data.message);
+     toast.error(error?.response?.data?.message||"something wrong in the  getUser");
   }finally{
     set({isUserLoading:false})
   }
-
+  
 },
 
 getMessages:async (userId)=>{

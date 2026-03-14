@@ -2,7 +2,9 @@ import {create} from 'zustand';
 import { axiosInstance } from '../lib/axios.js';
 import toast from 'react-hot-toast';
 import{io, Socket} from 'socket.io-client';
-import axios from 'axios';
+
+  const BASE_URL = "http://localhost:5000";
+
 
 export const useAuthStore=create((set,get)=>({
 authUser:null,
@@ -87,12 +89,13 @@ connectSocket:()=>{
   });
   socket.connect();
   
-  set ({socket:socket});
-
-
+  set ({socket});
   socket.on("getOnlineUsers",(userIds)=>{
     set({onlineUsers:userIds})
+     console.log("online users :",userIds);
   })
+
+
 },
 disconnectSocket:()=>{
   if(get().socket?.connected) get().socket.disconnect();

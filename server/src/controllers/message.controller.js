@@ -1,21 +1,21 @@
 import User from "../model/user.model.js";
 import Message from "../model/message.model.js";
-
+import {getReceiverSocketId} from '../lib/socket.js'
 import Cloudinary from '../lib/cloudianry.js';
+
 //get users for sider 
-export const getUserForSider=async(req,res)=>{
+
+export const getUsersForSidebar=async(req,res)=>{
 try{const loggedInUserId=req.user._id;
   const filteredUsers=await User.find({_id:{$ne:loggedInUserId}}).select("-password");
   res.status(200).json(filteredUsers);
   
 }catch(error){
- console.error("Error in getUsersForSidebar: ", error.message);
+ console.error("Error in getUsers ForSidebar: ", error.message);
     res.status(500).json({ error: "Internal server error" });
 }
 }
-
-
-//get messsages
+  //get messsages
 export const getMessages=async(req,res)=>{
 try {
   const {id:userToChatId}=req.params;
@@ -36,11 +36,13 @@ try {
 //Send Messaages 
 export const sendMessage=async(req,res)=>{
 try{
+ 
   const {text,image}=req.body;
+   const senderId=req.user._id;
   const{id:receiverId}=req.params;
   let imageUrl;
   if(image){
-    const uploadResponse=await Cloudinary.uploader(image);
+    const uploadResponse=await Cloudinary.uploader.upload(image);
     imageUrl=uploadResponse.secure_url;
   }
   const newMessage=new Message({
